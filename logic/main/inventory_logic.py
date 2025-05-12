@@ -116,25 +116,37 @@ class InventoryLogic:
         self.validate_edit()
         self.item.window.destroy()
 
+
     def validate_edit(self):
         """Update the item with new values if valid."""
         db_data = self.inv_db.get_data_with_id(self.edit_id)
-        updated = {}
+        product_name = ""
+        package_number = 0
+        quantity = 0
+        unit_price = 0
+        profit = 0
+        category = ""
 
-        for key, var in self.item.get_data().items():
-            attr = key.replace(" ", "_").lower()
-            value = self.handle_edit_exception(attr, var, db_data)
-            updated[key] = value if var else getattr(db_data, attr)
+        for (key, var) in self.item.get_data().items():
+            value = self.handle_edit_exception(key.replace(" ", "_").lower(), var, db_data)
+            if key == "Product Name":
+                product_name = var if var else db_data.product_name
 
-        self.inv_db.edit_data(
-            self.edit_id,
-            updated["Product Name"],
-            updated["Package Number"],
-            updated["Quantity"],
-            updated["Unit Price"],
-            updated["Profit"],
-            updated["Category"]
-        )
+            if key == "Package Number":
+                package_number = value
+
+            if key == "Quantity":
+                quantity = value
+
+            if key == "Unit Price":
+                unit_price = value
+
+            if key == "Profit":
+                profit = value
+
+            if key == "Category":
+                category = var if var else db_data.category
+        self.inv_db.edit_data(self.edit_id, product_name, package_number, quantity, unit_price, profit, category)
         self.inv_db.load_data()
 
     def handle_edit_exception(self, key, var, db):

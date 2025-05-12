@@ -53,20 +53,31 @@ class SalesLogic:
                 if quantity:
                     if quantity.isdigit():
                         if float(quantity) > 0:
-                            if self.db.check_product_quantity(product_name).total_quantity > 0:
-                                # إضافة بيانات البيع
-                                self.db.add_data_to_db(
-                                    inv_prod_id=inventroy_product.id,
-                                    tree=self.tree,
-                                    user=self.username,
-                                    product_name=product_name,
-                                    quantity=int(quantity),
-                                    category=inventroy_product.category,
-                                    unit_price=inventroy_product.total_price,
-                                    total_price=float(quantity) * inventroy_product.total_price
-                                )
-                                self.add.window.destroy()
-                                self.display_count_message(product_name)
+                            product_quantity = self.db.check_product_quantity(product_name).total_quantity
+                            if product_quantity > 0:
+                                if float(quantity) <= product_quantity:
+                                    # إضافة بيانات البيع
+                                    self.db.add_data_to_db(
+                                        inv_prod_id=inventroy_product.id,
+                                        tree=self.tree,
+                                        user=self.username,
+                                        product_name=product_name,
+                                        quantity=int(quantity),
+                                        category=inventroy_product.category,
+                                        unit_price=inventroy_product.total_price,
+                                        total_price=float(quantity) * inventroy_product.total_price
+                                    )
+                                    self.add.window.destroy()
+                                    self.display_count_message(product_name)
+                                else:
+                                    MessagePopup(
+                                        self.root,
+                                        "Error",
+                                        "Not Enough Stock",
+                                        f"This product has {product_quantity} quantity.\nPlease check the inventory page.",
+                                        "danger"
+                                    )
+
                             else:
                                 MessagePopup(
                                     self.root,
@@ -186,17 +197,28 @@ class SalesLogic:
         if new_quantity:
             if new_quantity.isdigit():
                 if float(new_quantity) > 0:
-                    if self.db.check_product_quantity(product_name).total_quantity > 0:
-                        self.db.edit_data(self.edit_id, new_quantity, self.tree)
-                        self.db.update_inv_quantity(product_name, old_quantity, new_quantity)
-                        self.edit_item.window.destroy()
-                        self.display_count_message(product_name)
+                    product_quantity = self.db.check_product_quantity(product_name).total_quantity
+                    if product_quantity > 0:
+                        if float(new_quantity) <= product_quantity:
+                            self.db.edit_data(self.edit_id, new_quantity, self.tree)
+                            self.db.update_inv_quantity(product_name, old_quantity, new_quantity)
+                            self.edit_item.window.destroy()
+                            self.display_count_message(product_name)
+                        else:
+                            MessagePopup(
+                                self.root,
+                                "Error",
+                                "Not Enough Stock",
+                                f"This product has {product_quantity} quantity.\nPlease check the inventory page.",
+                                "danger"
+                            )
+
                     else:
                         MessagePopup(
                             self.root,
                             "Error",
                             "Not Enough Stock",
-                            "This product has zero quantity.\nPlease check the inventory page.",
+                            f"This product has zero quantity.\nPlease check the inventory page.",
                             "danger"
                         )
                 else:
