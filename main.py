@@ -1,5 +1,5 @@
 from utils.window import Window
-from logic.app import App
+from logic.core.app import App
 
 
 
