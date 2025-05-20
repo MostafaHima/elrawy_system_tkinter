@@ -96,13 +96,19 @@ class SalesDBLogic:
 
     def load_sales_data(self, tree):
 
+        current_month = dt.now().month
+        current_year = dt.now().year
+
+        month_str = str(current_month).zfill(2)
+        date_prefix = f"{current_year}-{month_str}"
+
         for item in tree.get_children():
             tree.delete(item)
 
         with self.db.app.app_context():
             count = self.db.Sales.query.count()
             if count is not None and count >=1:
-                data = self.db.Sales.query.all()
+                data = self.db.Sales.query.filter(self.db.Sales.date.startswith(date_prefix)).all()
 
 
                 quantity = 0

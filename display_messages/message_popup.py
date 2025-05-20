@@ -1,6 +1,8 @@
 from tkinter import ttk
 from ttkbootstrap import Toplevel
 import ttkbootstrap as ttk
+import tkinter as tk
+import os
 
 class MessagePopup(Toplevel):
     def __init__(self,root, subtitle, title, message, style):
@@ -11,6 +13,7 @@ class MessagePopup(Toplevel):
         self.message = message
         self.text_title = title
         self.text_style = style
+        self.iconbitmap(False, os.path.join("assets", "logo.ico"))
 
 
         self.title(subtitle)
@@ -28,7 +31,9 @@ class MessagePopup(Toplevel):
         self.bind("<Return>", lambda evnet :self.cmd())
         self.grab_set()
         self.focus_set()
+
         self.center_window()
+
 
     def center_window(self):
         self.update_idletasks()
@@ -43,4 +48,5 @@ class MessagePopup(Toplevel):
         y = ((screen_height -70) // 2) - (window_height // 2)
 
         self.geometry(f"+{x}+{y}")
+
 

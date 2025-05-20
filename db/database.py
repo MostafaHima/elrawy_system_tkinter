@@ -4,6 +4,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import String, Integer, Float, Date, Time
+import os
+import shutil
 
 
 class Base(DeclarativeBase):
@@ -11,9 +13,24 @@ class Base(DeclarativeBase):
 
 class DataBase:
     def __init__(self):
+
+
+        app_folder = os.path.join(os.path.expanduser("~"), "MyProgramData", "elrawy_app")
+        instance_folder = os.path.join(app_folder, "instance")
+        os.makedirs(instance_folder, exist_ok=True)
+        db_path = os.path.join(instance_folder, "elrawy_bookstore_mangment.db")
+
+        if not os.path.exists(db_path):
+            # نسخ القاعدة من الملف الأصلي لو موجود
+            original_db = "instance/elrawy_bookstore_mangment.db"
+            if os.path.exists(original_db):
+                shutil.copy(original_db, db_path)
+
+
         self.app = Flask(__name__)
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///elrawy_bookstore_mangment.db"
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        print(db_path)
 
         self.db = SQLAlchemy(model_class=Base)
         self.db.init_app(self.app)

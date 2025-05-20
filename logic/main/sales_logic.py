@@ -13,7 +13,7 @@ class SalesLogic:
 
         # نوافذ الإدخال المختلفة
         self.add = PopupDataEntry("Add Data", "Add a New Sale", self.labels)
-        self.edit = PopupDataEntry("Edit Data", "Edit any Product you want", ["ID"])
+        self.edit = PopupDataEntry("Edit Data", "Edit Product with an ID", ["ID"])
         self.delete = PopupDataEntry("Delete Data", "Delete with an ID", ["ID"])
         self.edit_item = PopupDataEntry("Edit item", "", ["Quantity"])
 
@@ -199,7 +199,9 @@ class SalesLogic:
                 if float(new_quantity) > 0:
                     product_quantity = self.db.check_product_quantity(product_name).total_quantity
                     if product_quantity > 0:
-                        if float(new_quantity) <= product_quantity:
+
+
+                        if int(old_quantity) + int(product_quantity) >= int(new_quantity):
                             self.db.edit_data(self.edit_id, new_quantity, self.tree)
                             self.db.update_inv_quantity(product_name, old_quantity, new_quantity)
                             self.edit_item.window.destroy()
@@ -209,7 +211,7 @@ class SalesLogic:
                                 self.root,
                                 "Error",
                                 "Not Enough Stock",
-                                f"This product has {product_quantity} quantity.\nPlease check the inventory page.",
+                                f"This product has {product_quantity + int(old_quantity)} quantity.\nPlease check the inventory page.",
                                 "danger"
                             )
 

@@ -51,10 +51,13 @@ class AuthManager:
 
             if check_username is None:
                 if check_email is None:
-                    self.db.add_user(username=username, email=email, password=password)
-                    self.show_popup("Success", "Account Created",
-                                    f"Your account has been successfully created.\nWelcome, {username}!", "success")
-                    clear_entries()
+                    if len(password) >= 8:
+                        self.db.add_user(username=username, email=email, password=password)
+                        self.show_popup("Success", "Account Created",
+                                        f"Your account has been successfully created.\nWelcome, {username}!", "success")
+                        clear_entries()
+                    else:
+                        self.show_popup("Info", "This password is short", "Please type a password long\n it must be over 8 chars", "info")
                 else:
                     self.show_popup("Error", "Email Already Exists",
                                     "The email you entered is already associated with another account.\nPlease use a different one.", "danger")
@@ -92,3 +95,5 @@ class AuthManager:
 
         elif not password:
             return "Info", "Missing Password", "Please enter your password.", "info"
+
+

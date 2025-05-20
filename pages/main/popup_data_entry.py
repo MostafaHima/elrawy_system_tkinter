@@ -68,6 +68,7 @@ class PopupDataEntry:
         self.window = ttk.Toplevel(title=self.title)
         self.window.focus_set()
         self.window.resizable(False, False)
+        self.window.iconbitmap(False, r"E:\Tkinter Projects\Elrawy_bookstore\assets\logo.ico")
 
         self.create_subtitle(row=0, column=0, columnspan=4)
         self.window.grab_set()

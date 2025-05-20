@@ -1,3 +1,4 @@
+import os.path
 from tkinter import ttk
 import ttkbootstrap as ttk
 from PIL import Image, ImageTk
@@ -57,7 +58,7 @@ class BaseTable:
         """
         Places a back button with an icon to navigate back.
         """
-        icon_path = r"E:\Tkinter Projects\Elrawy_bookstore\assets\back_icon.png"  # الأفضل جعله نسبي
+        icon_path = os.path.join("assets", "back_icon.png")  # الأفضل جعله نسبي
         icon = Image.open(icon_path)
         resized_icon = icon.resize((50, 50), Image.Resampling.LANCZOS)
         back_image = ImageTk.PhotoImage(resized_icon)

@@ -1,6 +1,6 @@
 import ttkbootstrap as ttk
-
-
+import tkinter as tk
+import os
 
 class Window(ttk.Window):
     def __init__(self):
@@ -9,6 +9,7 @@ class Window(ttk.Window):
         self.grid_columnconfigure(0, weight=1, uniform="a")
         self.grid_rowconfigure(0, weight=1, uniform="a")
         self.title("El-Rawy Bookstore")
+        self.iconbitmap(False, os.path.join("assets", "logo.ico"))
 
 
 

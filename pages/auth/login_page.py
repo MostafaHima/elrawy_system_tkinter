@@ -29,13 +29,9 @@ class LoginPage(AuthFormBase):
         self.set_title_label()
         self.create_input_entries()
         self.create_input_labels()
-        self.create_main_button(
-            text="Login Now",
-            cmd=self.send_info
-        )
-        self.create_forget_password_button(
-            cmd=lambda: forget_password(self.parent, self.get_window_size, self.email_var)
-        )
+        self.create_main_button(text="Login Now", cmd=self.send_info)
+
+        self.create_forget_password_button(cmd=lambda: forget_password(self.parent, self.get_window_size, self.email_var))
         self.configure_main_grid()
         self.configure_child_grid()
         self.place_main_frame()
