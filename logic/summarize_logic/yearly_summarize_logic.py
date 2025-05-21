@@ -73,4 +73,4 @@ class YearlyLogic:
             months = 1
 
         mean = self.total_sales / months
-        self.yearly_vars["average_monthly_sales"].set(f"{int(mean)} Items")
+        self.yearly_vars["average_monthly_sales"].set(f"£ {int(mean)}")

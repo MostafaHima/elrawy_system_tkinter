@@ -4,6 +4,7 @@ from tkinter import ttk
 import ttkbootstrap as ttk
 from PIL import Image, ImageTk
 from themes.app_theme import AppTheme
+from utils.assets_paths import asset_path
 
 
 class AuthFormBase:
@@ -108,7 +109,7 @@ class AuthFormBase:
         img_width = int(screen_width * 0.25)
         img_height = int(screen_height * 0.25)
 
-        logo_path = os.path.join("assets", "el_raway_logo2.png")
+        logo_path = asset_path("el_raway_logo2.png")
         img = Image.open(logo_path)
         img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(img)

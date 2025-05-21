@@ -8,6 +8,7 @@ import ttkbootstrap as ttk
 from display_messages.message_popup import MessagePopup
 from db.db_auth.auth_db import AuthDB
 import socket
+from utils.assets_paths import asset_path
 
 def forget_password(parent, window_size, email_var):
     def center_window():
@@ -24,7 +25,7 @@ def forget_password(parent, window_size, email_var):
     window = ttk.Toplevel(parent)
     window.title("Reset Your Password")
     window.resizable(False, False)
-    window.iconbitmap(False,  os.path.join("assets", "logo.ico"))
+    window.iconbitmap(False, asset_path("logo.ico"))
 
 
 
@@ -65,11 +66,6 @@ def handle_password_request(window, parent, email_var):
     user = AuthDB().is_email_taken(email)
     if user:
         send_password_email(parent, email, user.username, user.password)
-        MessagePopup(
-            parent, "Success", "Email Sent",
-            "A message with your password has been sent to your inbox.",
-            "success"
-        )
     else:
         MessagePopup(
             parent, "Email Not Found", "User Not Registered",
@@ -110,7 +106,12 @@ def send_password_email(root, to_email, username, password):
             server.starttls()
             server.login(from_email, app_password)
             server.send_message(msg)
-            server.quit()
+            MessagePopup(
+                root, "Success", "Email Sent",
+                "A message with your password has been sent to your inbox.",
+                "success"
+            )
+
 
     except socket.gaierror:
         MessagePopup(

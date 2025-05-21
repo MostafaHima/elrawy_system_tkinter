@@ -3,7 +3,7 @@ from ttkbootstrap import Toplevel
 import ttkbootstrap as ttk
 import tkinter as tk
 import os
-
+from utils.assets_paths import asset_path
 class MessagePopup(Toplevel):
     def __init__(self,root, subtitle, title, message, style):
         super().__init__()
@@ -13,7 +13,7 @@ class MessagePopup(Toplevel):
         self.message = message
         self.text_title = title
         self.text_style = style
-        self.iconbitmap(False, os.path.join("assets", "logo.ico"))
+        self.iconbitmap(False, asset_path("logo.ico"))
 
 
         self.title(subtitle)

@@ -6,6 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import String, Integer, Float, Date, Time
 import os
 import shutil
+import sys
 
 
 class Base(DeclarativeBase):
@@ -14,23 +15,38 @@ class Base(DeclarativeBase):
 class DataBase:
     def __init__(self):
 
-
         app_folder = os.path.join(os.path.expanduser("~"), "MyProgramData", "elrawy_app")
         instance_folder = os.path.join(app_folder, "instance")
-        os.makedirs(instance_folder, exist_ok=True)
-        db_path = os.path.join(instance_folder, "elrawy_bookstore_mangment.db")
+        assets_folder = os.path.join(app_folder, "assets")
 
+        os.makedirs(instance_folder, exist_ok=True)
+        os.makedirs(assets_folder, exist_ok=True)
+
+        db_path = os.path.join(instance_folder, "elrawy_bookstore_mangment.db")
         if not os.path.exists(db_path):
-            # نسخ القاعدة من الملف الأصلي لو موجود
-            original_db = "instance/elrawy_bookstore_mangment.db"
+            original_db = os.path.join("instance", "elrawy_bookstore_mangment.db")
             if os.path.exists(original_db):
                 shutil.copy(original_db, db_path)
 
+        # 📦 تحديد مجلد الصور حسب نوع التشغيل
+        if getattr(sys, 'frozen', False):
+            base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+        else:
+            base_path = os.path.abspath(".")
+
+        project_assets = os.path.join(base_path, "assets")
+
+        # 🔁 نسخ الصور
+        if os.path.exists(project_assets):
+            for filename in os.listdir(project_assets):
+                src = os.path.join(project_assets, filename)
+                dst = os.path.join(assets_folder, filename)
+                if not os.path.exists(dst):
+                    shutil.copy(src, dst)
 
         self.app = Flask(__name__)
         self.app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-        print(db_path)
 
         self.db = SQLAlchemy(model_class=Base)
         self.db.init_app(self.app)

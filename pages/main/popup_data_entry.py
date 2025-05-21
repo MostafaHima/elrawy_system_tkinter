@@ -2,7 +2,7 @@
 import ttkbootstrap as ttk
 import tkinter as tk
 import db.db_main.sales_db
-
+from utils.assets_paths import asset_path
 class PopupDataEntry:
     def __init__(self,title, subtitle, labels:list):
         self.labels = labels
@@ -68,7 +68,7 @@ class PopupDataEntry:
         self.window = ttk.Toplevel(title=self.title)
         self.window.focus_set()
         self.window.resizable(False, False)
-        self.window.iconbitmap(False, r"E:\Tkinter Projects\Elrawy_bookstore\assets\logo.ico")
+        self.window.iconbitmap(False, asset_path("logo.ico"))
 
         self.create_subtitle(row=0, column=0, columnspan=4)
         self.window.grab_set()

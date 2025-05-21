@@ -3,6 +3,7 @@ from tkinter import ttk
 import ttkbootstrap as ttk
 from PIL import Image, ImageTk
 from widgets.table_actions import ActionButtons
+from utils.assets_paths import asset_path
 
 class BaseTable:
     def __init__(self, root, title):
@@ -58,7 +59,7 @@ class BaseTable:
         """
         Places a back button with an icon to navigate back.
         """
-        icon_path = os.path.join("assets", "back_icon.png")  # الأفضل جعله نسبي
+        icon_path = asset_path("back_icon.png")
         icon = Image.open(icon_path)
         resized_icon = icon.resize((50, 50), Image.Resampling.LANCZOS)
         back_image = ImageTk.PhotoImage(resized_icon)

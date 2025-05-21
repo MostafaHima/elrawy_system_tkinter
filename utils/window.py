@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import tkinter as tk
 import os
+from utils.assets_paths import asset_path
 
 class Window(ttk.Window):
     def __init__(self):
@@ -8,8 +9,8 @@ class Window(ttk.Window):
         self.center_window()
         self.grid_columnconfigure(0, weight=1, uniform="a")
         self.grid_rowconfigure(0, weight=1, uniform="a")
-        self.title("El-Rawy Bookstore")
-        self.iconbitmap(False, os.path.join("assets", "logo.ico"))
+        self.title("ElRawy Bookstore")
+        self.iconbitmap( asset_path("logo.ico"))
 
 
 
