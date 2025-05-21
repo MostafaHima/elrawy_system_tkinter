@@ -10,6 +10,20 @@ from db.db_auth.auth_db import AuthDB
 import socket
 from utils.assets_paths import asset_path
 
+
+import os
+import sys
+from dotenv import load_dotenv
+
+if getattr(sys, 'frozen', False):
+    # لو البرنامج متحوّل لـ exe
+    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+else:
+    base_path = os.path.abspath(".")
+
+env_path = os.path.join(base_path, ".env")
+load_dotenv(env_path)
+
 def forget_password(parent, window_size, email_var):
     def center_window():
         window.update_idletasks()

@@ -15,6 +15,7 @@ class Base(DeclarativeBase):
 class DataBase:
     def __init__(self):
 
+
         app_folder = os.path.join(os.path.expanduser("~"), "MyProgramData", "elrawy_app")
         instance_folder = os.path.join(app_folder, "instance")
         assets_folder = os.path.join(app_folder, "assets")
