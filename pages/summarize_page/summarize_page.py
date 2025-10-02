@@ -10,6 +10,8 @@ from logic.summarize_logic.monthly_summarize_logic import MonthlyLogic
 from logic.summarize_logic.yearly_summarize_logic import YearlyLogic
 from logic.summarize_logic.monthly_report_logic import MonthlyReportLogic
 
+from utils.assets_paths import asset_path
+
 import tkinter as tk
 import ttkbootstrap as ttk
 from PIL import Image, ImageTk
@@ -95,7 +97,7 @@ class SummarizePage(tk.Frame):
         """
         Places a back button with an icon to navigate back.
         """
-        icon_path = r"E:\Tkinter Projects\Elrawy_bookstore\assets\back_icon.png"  # الأفضل جعله نسبي
+        icon_path = asset_path("back_icon.png") # الأفضل جعله نسبي
         icon = Image.open(icon_path)
         resized_icon = icon.resize((50, 50), Image.Resampling.LANCZOS)
         back_image = ImageTk.PhotoImage(resized_icon)

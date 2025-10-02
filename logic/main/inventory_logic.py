@@ -7,14 +7,14 @@ class InventoryLogic:
         self.root = root
         self.tree = tree
         self.user = user
-        self.edit_id = None
+        self.product_name = None
         self.inv_db = InventoryDB(tree)
 
 
         self.inv_labels = ["Product Name", "Package Number", "Quantity", "Unit Price", "Profit", "Category"]
 
         self.add = PopupDataEntry("Add Data", "Add to Your Inventory", self.inv_labels)
-        self.edit = PopupDataEntry("Edit Data", "Edit any Product you want", ["ID"])
+        self.edit = PopupDataEntry("Edit Data", "Edit any Product you want", ["Product Name"])
         self.delete = PopupDataEntry("Delete Data", "Delete with an ID", ["ID"])
         self.item = PopupDataEntry("Edit item", "", self.inv_labels)
 
@@ -85,27 +85,36 @@ class InventoryLogic:
 
     def edit_data(self):
         """Open the popup to input an ID for editing."""
-        self.edit.vars["ID"].set("0")
+
+        try:
+            old_entry_var = self.edit.vars.get("Product Name")
+            if old_entry_var:
+                old_entry_var.trace_remove("write", self.edit.trace_id)
+        except:
+            pass
+
+        self.edit.vars["Product Name"].set("")
         self.edit.run()
         self.edit.submit_button(cmd=self.edit_action)
         self.edit.center_window()
+        self.edit.list_box("Product Name")
         self.edit.window.bind("<Return>", lambda event: self.edit_action())
 
     def edit_action(self):
         """Validate and continue to edit specific product."""
-        _id = self.edit.get_data()["ID"]
-        self.edit_id = _id
-        if self.inv_db.check_id_exists(_id):
+        product_name = self.edit.get_data()["Product Name"]
+        self.product_name = product_name
+        if self.inv_db.check_product_name_existing(product_name):
             self.edit.window.destroy()
             self.edit_item()
         else:
-            MessagePopup(self.root, "Error", "Invalid ID",
-                         f"No data found for ID {_id}.", "danger")
+            MessagePopup(self.root, "Error", "Invalid product Name",
+                         f"No data found for product {product_name}.", "danger")
 
     def edit_item(self):
         """Open edit form for a specific item."""
         self.organize_inputs(self.item)
-        self.item.subtitle = f"Edit item {self.edit_id} Information"
+        self.item.subtitle = f"Edit item {self.product_name} Information"
         self.item.run()
         self.item.submit_button(cmd=self.edit_item_action)
         self.item.center_window()
@@ -115,11 +124,13 @@ class InventoryLogic:
         """Save the edited item."""
         self.validate_edit()
         self.item.window.destroy()
+        MessagePopup(self.root, "success", "Editing went well",
+                         f"{self.product_name} has been edited successfuly.", "success")
 
 
     def validate_edit(self):
         """Update the item with new values if valid."""
-        db_data = self.inv_db.get_data_with_id(self.edit_id)
+        db_data = self.inv_db.get_data_with_product_name(self.product_name)
         product_name = ""
         package_number = 0
         quantity = 0
@@ -146,8 +157,11 @@ class InventoryLogic:
 
             if key == "Category":
                 category = var if var else db_data.category
-        self.inv_db.edit_data(self.edit_id, product_name, package_number, quantity, unit_price, profit, category)
+        self.inv_db.edit_data(self.product_name, product_name, package_number, quantity, unit_price, profit, category)
+        
+        
         self.inv_db.load_data()
+        
 
     def handle_edit_exception(self, key, var, db):
         """Handle potential conversion errors during editing."""

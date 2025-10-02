@@ -97,9 +97,9 @@ class InventoryDB:
             return item
 
 
-    def edit_data(self, _id, product_name, package_number, qunatity, unit_price, profit, category):
+    def edit_data(self, _product_name, product_name, package_number, qunatity, unit_price, profit, category):
         with self.db.app.app_context():
-            item = self.db.Inventroy.query.filter_by(id=_id).first()
+            item = self.db.Inventroy.query.filter_by(product_name=_product_name).first()
             if qunatity > 0 and package_number == 0:
                 package_number = 1
 
@@ -134,6 +134,16 @@ class InventoryDB:
                     row.quantity = 0
                     row.package_number = 0
             self.db.db.session.commit()
+
+    def check_product_name_existing(self, value):
+        with self.db.app.app_context():
+            exists = self.db.Inventroy.query.filter_by(product_name = value).first()
+            return exists
+        
+    def get_data_with_product_name(self, prod_name):
+        with self.db.app.app_context():
+            item = self.db.Inventroy.query.filter_by(product_name=prod_name).first()
+            return item
 
 
 

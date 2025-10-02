@@ -3,7 +3,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from dotenv import load_dotenv
+
 import ttkbootstrap as ttk
 from display_messages.message_popup import MessagePopup
 from db.db_auth.auth_db import AuthDB
